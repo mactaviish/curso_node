@@ -1,24 +1,6 @@
 const chalk = require('chalk');
 const fs = require('fs');
-
-// 1
-// function pegarArquivo(caminhoArquivo) {
-//     fs.readFile(caminhoArquivo, encoding, (erro, texto) => {
-//         if (erro) {
-//             tratarErros(erro);
-//             // console.log(chalk.bold.red(`Houve um erro na busca pelo seu arquivo.\n{Error: ${erro.errno} | Code: ${erro.code}}`));
-//         } else {
-//             console.log(chalk.green(texto));
-//         }
-//     });
-// }
-// 2
-// function pegarArquivo(caminhoArquivo) {
-//     fs.promises
-//         .readFile(caminhoArquivo, encoding)
-//         .then((texto) => {chalk.green.bold(console.log('deu boa'))})
-//         .catch((erro) => {chalk.red.bold(tratarErros(erro))});
-// }
+const path = require('path');
 
 function extraiLinks(texto) {
     const regex = /\[([^\]]*)\]\((https?:\/\/[^$#\s].[^\s]*)\)/gm;
@@ -31,18 +13,24 @@ function extraiLinks(texto) {
     return arrayResultados.length === 0 ? 'Não há links!' : arrayResultados;
 }
 
-function tratarErros(erro) {
-    throw new Error(chalk.red.bold(erro));
-}
-
 async function pegarArquivo(caminhoArquivo) {
     const encoding = 'utf-8';
+    const caminhoAbsoluto = path.join(__dirname, '..', caminhoArquivo);
     try {
-        const texto =  await fs.promises.readFile(caminhoArquivo, encoding);
-        return extraiLinks(texto);
+        const arquivos = await fs.promises.readdir(caminhoAbsoluto, { encoding });
+        const result = await Promise.all(arquivos.map(async (arquivo) => {
+            const localArquivo = `${caminhoAbsoluto}/${arquivo}`;
+            const texto = await fs.promises.readFile(localArquivo, encoding);
+            return extraiLinks(texto);
+        }));
+        return result;
     } catch (error) {
-        tratarErros(error);
+        tratarErros
     }
+}
+
+function tratarErros(error) {
+    throw new Error(chalk.red.bold(error));
 }
 
 module.exports = pegarArquivo;
