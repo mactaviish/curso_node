@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "cli": "node cli.js ./curso_node/arquivos/"
+    "test": "jest ./test",
+    "cli": "node cli.js ./arquivos/texto1.md"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +13,8 @@
   "dependencies": {
     "chalk": "^4.0.0",
     "node-fetch": "^3.2.4"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0"
   }
 }

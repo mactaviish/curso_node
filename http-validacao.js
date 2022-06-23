@@ -1,24 +1,38 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-async function checaStatus(arrayURL) {
-    const arrayStatus = await Promise.all(arrayURL.map(async url => {
-        const response = await fetch(url);
-        return response.status;
-    }));
-    return arrayStatus;
+function manejaErros(erro) {
+  throw new Error(erro.message);
 }
 
-function geraArrayURL(arrayLinks) {
-    return arrayLinks.map(link => link.map(objetoLink => Object.values(objetoLink).join()));
+async function checaStatus(arrayURLs) {
+  try {
+    const arrayStatus = await Promise
+      .all(arrayURLs
+        .map(async url => {
+          const res = await fetch(url)
+          return res.status;
+    }))
+    return arrayStatus;
+  } catch(erro) {
+    manejaErros(erro);
+  }
+}
+
+function geraArrayDeURLs(arrayLinks) {
+  return arrayLinks
+    .map(objetoLink => Object
+      .values(objetoLink).join());
 }
 
 async function validaURLs(arrayLinks) {
-    const links = geraArrayURL(arrayLinks);
-    const statusLinks = await checaStatus(links);
-    return arrayLinks[0].map((object, index) => ({
-        ...object,
-        status: statusLinks[index]
-    }));
+  const links = geraArrayDeURLs(arrayLinks);
+  const statusLinks = await checaStatus(links);
+  
+  const resultados = arrayLinks.map((objeto, indice) => ({
+    ...objeto,
+    status: statusLinks[indice]
+  }))
+  return resultados;
 }
 
 module.exports = validaURLs;
