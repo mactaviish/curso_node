@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const username = encodeURIComponent("leonardo");
-const password = encodeURIComponent("<4JRfyMnVdwac0Cez>");
+const password = encodeURIComponent("password");
 const cluster = "express.8qe88hs.mongodb.net";
 const retryWrites = "true&w=majority";
 
