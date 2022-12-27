@@ -1,8 +1,8 @@
-import livros from "../models/Livro.js";
+import Livro from "../models/Livro.js";
 
 class LivroController {
     static listarLivros = (req, res) => {
-        livros.find()
+        Livro.find()
             .populate('autor')
             .exec((err, livros) => {
                 res.status(200).json(livros);
@@ -10,9 +10,9 @@ class LivroController {
     }
 
     static listarLivrosColecao = (req, res) => {
-        const colecao = req.query.colecao;
+        const {colecao} = req.query;
 
-        livros.find({'colecao': colecao}, {}, (err, livros) => {
+        Livro.find({'colecao': colecao}, {}, (err, livros) => {
             if (err) {
                 res.status(400).send({message: `Livros não encontrados: ${err.message}`});
             } else {
@@ -22,9 +22,9 @@ class LivroController {
     }
 
     static listarLivroId = (req, res) => {
-        const id = req.params.id;
+        const {id} = req.params;
 
-        livros.findById(id)
+        Livro.findById(id)
             .populate('autor', 'nome')
             .exec((err, livro) => {
             if (err) {
@@ -36,7 +36,7 @@ class LivroController {
     }
 
     static inserirLivro = (req, res) => {
-        let livro = new livros(req.body);
+        const livro = new Livro(req.body);
 
         livro.save((err) => {
             if (err) {
@@ -48,9 +48,9 @@ class LivroController {
     }
 
     static atualizarLivro = (req, res) => {
-        const id = req.params.id;
+        const {id} = req.params;
 
-        livros.findByIdAndUpdate(id, {$set: req.body}, (err) => {
+        Livro.findByIdAndUpdate(id, {$set: req.body}, (err) => {
             if (err) {
                 res.status(500).send({message: `Falha ao atualizar o livro: ${err.message}`})
             } else {
@@ -60,9 +60,9 @@ class LivroController {
     }
 
     static deletarLivro = (req, res) => {
-        const id = req.params.id;
+        const {id} = req.params;
 
-        livros.findByIdAndDelete(id, (err) => {
+        Livro.findByIdAndDelete(id, (err) => {
             if (err) {
                 res.status(500).send({message: `Falha ao deletar: ${err.message}`})
             } else {
