@@ -1,5 +1,4 @@
-/* eslint-disable import/extensions */
-import Autor from '../models/Autor.js';
+import Autor from '../models/autor.js';
 
 class AutorController {
   static listarAutores = (req, res) => {
@@ -23,6 +22,7 @@ class AutorController {
 
   static inserirAutor = (req, res) => {
     const autor = new Autor(req.body);
+    console.log(req.body);
 
     autor.save((err) => {
       if (err) {

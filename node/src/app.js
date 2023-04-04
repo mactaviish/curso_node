@@ -1,11 +1,10 @@
-/* eslint-disable no-console */
 import express from 'express';
 import db from './cfg/dbConnect.js';
 import routes from './routes/index.js';
 
-db.on('error', console.log.bind(console, 'Erro de conexão'));
+db.on('error', console.log.bind(console, 'connection error'));
 db.once('open', () => {
-  console.log('Conexão com a base feita com sucesso!');
+  console.log('connection ok');
 });
 
 const app = express();

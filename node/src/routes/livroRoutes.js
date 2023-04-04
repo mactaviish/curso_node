@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import express from 'express';
 import LivroController from '../controllers/livroController.js';
 

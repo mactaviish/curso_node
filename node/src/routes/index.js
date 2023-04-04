@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import express from 'express';
 import livros from './livroRoutes.js';
 import autores from './autorRoutes.js';
